@@ -1,6 +1,6 @@
 
-CXXFLAGS  = -I../../tipsy_wrapper
-LDFLAGS = -L../../tipsy_wrapper
+CXXFLAGS  = -I../tipsy_wrapper
+LDFLAGS = -L../tipsy_wrapper
 LIBS    = -ltipsy
 
 collide: collide.o
