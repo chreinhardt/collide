@@ -36,8 +36,6 @@ public:
     std::string profile2;
     std::string output;
 
-    std::vector<Particle> p;
-
     collide(std::string in1, std::string in2, std::string out, double dx1, double dy1, double dz1,
             double dx2, double dy2, double dz2, double v_x1, double v_y1, double v_z1, double v_x2,
             double v_y2, double v_z2)
@@ -77,17 +75,16 @@ public:
         TipsyInFile in;
 
         R = 0.0;
+        Particle particle;
 
         in.open(file);
 
-        std::vector<Particle> p(in.size());
-
-        for (size_t i = 0; i < p.size(); ++i)
+        while (!in.eof())
         {
             // Read one particle from Tipsy file
-            in >> p[i];
+            in >> particle;
 
-            r = sqrt(p[i].x*p[i].x + p[i].y*p[i].y + p[i].z*p[i].z);
+            r = sqrt(particle.x*particle.x + particle.y*particle.y + particle.z*particle.z);
             if (r > R)
             {
                 R = r;
@@ -107,9 +104,13 @@ public:
         in.open(profile1);
 
         cout << "N: " << in.size() << " t: " << in.time() << endl;
-
+        long N = 0;
+        TipsyOutFile out;
+        out.open(output);
+        out.time(0.0);
         while (!in.eof())
         {
+            N++;
             in >> particle;
 
             // Change positions
@@ -121,8 +122,7 @@ public:
             particle.vx += vx1;
             particle.vy += vy1;
             particle.vz += vz1;
-
-            p.push_back(particle);
+            out << particle;
         }
         in.close();
 
@@ -134,6 +134,7 @@ public:
 
         while (!in.eof())
         {
+            N++;
             in >> particle;
 
             // Change positions
@@ -145,23 +146,12 @@ public:
             particle.vx += vx2;
             particle.vy += vy2;
             particle.vz += vz2;
-
-            p.push_back(particle);
+            out << particle;
         }
         in.close();
 
-        // Write output file
-        TipsyOutFile out;
-        out.open(output);
-        out.time(0.0);
-
-        for (size_t i = 0; i < p.size(); ++i)
-        {
-            out << p[i];
-        }
-
         cout << "Writing output file " << output << endl;
-        cout << "N: " << p.size();
+        cout << "N: " << N;
 
         out.close();
 
@@ -179,14 +169,14 @@ double get_R(std::string file)
 
     in.open(file);
 
-    std::vector<Particle> p(in.size());
+    Particle particle;
 
-    for (size_t i = 0; i < p.size(); ++i)
+    while (!in.eof())
     {
         // Read one particle from Tipsy file
-        in >> p[i];
+        in >> particle;
 
-        r = sqrt(p[i].x*p[i].x + p[i].y*p[i].y + p[i].z*p[i].z);
+        r = sqrt(particle.x*particle.x + particle.y*particle.y + particle.z*particle.z);
         if (r > R)
         {
             R = r;
@@ -204,14 +194,14 @@ double get_M(std::string file)
 
     in.open(file);
 
-    std::vector<Particle> p(in.size());
+   Particle particle;
 
-    for (size_t i = 0; i < p.size(); ++i)
+    while (!in.eof())
     {
         // Read one particle from Tipsy file
-        in >> p[i];
+        in >> particle;
 
-        M = M + p[i].m;
+        M = M + particle.m;
     }
 
     return M;
