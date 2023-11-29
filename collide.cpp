@@ -270,7 +270,7 @@ int main(int argc, char** argv)
     v1 = deltav*gamma;
     v2 = -deltav*(1 - gamma);
 
-    cout << "Profile1:" << in2 << " Profile2: " << in2 << "Ouput: " << out << " b: " << b << " v: " << deltav << endl;
+    cout << "Profile1:" << in1 << " Profile2: " << in2 << "Ouput: " << out << " b: " << b << " v: " << deltav << endl;
 
     cout << "M1: " << M1 << " M2: " << M2 << " gamma: " << gamma << endl;
     cout << "x1: " << x1 << " y1: " << y1 << " x2: " << x2 << " y2: " << y2 << endl;
